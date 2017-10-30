@@ -17,7 +17,6 @@ Template.History.helpers({
 Template.Transaction.helpers({
 	readable_date()
 	{
-		console.log(this.createdAt);
 		return this.createdAt.toDateString();
 	},
 });

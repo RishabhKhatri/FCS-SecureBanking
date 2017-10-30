@@ -18,9 +18,10 @@
 	      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 	      <ul class="right hide-on-med-and-down">
 	      	{{#if currentUser}}
-	      		<li><a href="#" class="logout">Logout</a></li>
+	      		<li><a href="/profile"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{currentUser.profile.name}}</a></li>
+	      		<li><a href="#" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
 	      	{{else}}
-	        	<li><a href="/get_started">Get Started</a></li>
+	        	<li><a href="/get_started"><i class="fa fa-play-circle" aria-hidden="true"></i> Get Started</a></li>
 	      	{{/if}}
 	      </ul>
 	    </div>
