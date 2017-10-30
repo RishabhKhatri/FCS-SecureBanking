@@ -1,0 +1,57 @@
+/* CSS declarations go here */
+.nav-wrapper
+{
+	background-color: #546e7a;
+}
+
+.nav-wrapper .brand-logo
+{
+	font-family: "Roboto";
+	font-weight: 300;
+	padding-left: 10px;
+	text-decoration: none;
+}
+
+.right li a
+{
+	text-decoration: none;
+	color: #fff;
+}
+
+body
+{
+	font-family: "Roboto";
+	background-color: #fff;
+	height: 100%;
+}
+.home-panel
+{
+	text-align: center;
+}
+
+.sidebar .collection a
+{
+	text-decoration: none;
+}
+
+.login-form label
+{
+	font-size: 20px;
+	margin-bottom: 0;
+}
+
+.form-control
+{
+	height: 2rem !important;
+}
+
+.register-form label
+{
+	font-size: 20px;
+	margin-bottom: 0;
+}
+
+.type-select
+{
+	display: block;
+}

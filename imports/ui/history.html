@@ -1,0 +1,27 @@
+<template name="History">
+	<div class="row">
+		<div class="col-sm-2">
+			{{> Sidebar}}
+		</div>
+		<div class="col-sm-10">
+			<div class="card-panel hoverable">
+				<h4>Current Balance: {{currentUser.profile.balance}}</h4>
+			</div>
+			{{#each transactions}}
+				{{> Transaction}}
+			{{/each}}
+		</div>
+	</div>
+</template>
+
+<template name="Transaction">
+	<div class="card-panel hoverable">
+		<h6>From: {{from}}</h6>
+		<h6>To: {{to}}</h6>
+		<h6>Amount: {{amount}}</h6>
+		<h6>Balance before: {{prev_balance}}</h6>
+		<h6>Balance after: {{current_balance}}</h6>
+		<h6>Transaction type: {{type}}</h6>
+		<h6>Date: {{readable_date}}</h6>
+	</div>
+</template>

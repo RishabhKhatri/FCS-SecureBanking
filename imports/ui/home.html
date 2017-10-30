@@ -1,0 +1,32 @@
+<template name="Home">
+	{{#if currentUser}}
+		<div class="row">
+			<div class="col-sm-2">
+				{{> Sidebar}}
+			</div>
+			<div class="col-sm-10">
+				<div class="home-panel card-panel hoverable">
+					<div class="panel-body">
+						<h1>Welcome to Secure Banking!</h1>
+						{{#if currentUser}}
+						<span style="font-size: 24px;">Manage your transactions smoothly.</span>
+						{{else}}
+						<span style="font-size: 24px;">Let's <a style="text-decoration: none;" href="/get_started">get started</a>.</span>
+						{{/if}}
+					</div>
+				</div>
+			</div>
+		</div>
+	{{else}}
+		<div class="home-panel card-panel hoverable">
+			<div class="panel-body">
+				<h1>Welcome to Secure Banking!</h1>
+				{{#if currentUser}}
+				<span style="font-size: 24px;">Manage your transactions smoothly.</span>
+				{{else}}
+				<span style="font-size: 24px;">Let's <a style="text-decoration: none;" href="/get_started">get started</a>.</span>
+				{{/if}}
+			</div>
+		</div>
+	{{/if}}
+</template>

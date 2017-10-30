@@ -1,0 +1,28 @@
+<body>
+	{{> Header}}
+
+	<div class="container-fluid">
+		{{> flashMessages}}
+		{{> MainLayout }}
+	</div>
+</body>
+
+<template name="MainLayout">
+	{{> Template.dynamic template=main }}	
+</template>
+
+<template name="Header">
+	<nav>
+	    <div class="nav-wrapper">
+	      <a href="/" class="brand-logo">Secure Banking</a>
+	      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+	      <ul class="right hide-on-med-and-down">
+	      	{{#if currentUser}}
+	      		<li><a href="#" class="logout">Logout</a></li>
+	      	{{else}}
+	        	<li><a href="/get_started">Get Started</a></li>
+	      	{{/if}}
+	      </ul>
+	    </div>
+	  </nav>
+</template>
