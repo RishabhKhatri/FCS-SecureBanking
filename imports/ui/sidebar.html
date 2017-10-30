@@ -1,10 +1,15 @@
 <template name="Sidebar">
 	<div class="sidebar">
 		<div class="collection">
-			<a href="/" class="collection-item">Home</a>
-			<a href="/new/transaction" class="collection-item">New Transactions</a>
-			<a href="/passbook" class="collection-item">Passbook</a>
-			<a href="/settings" class="collection-item">Settings</a>
+			<a href="{{ pathFor route='homeRoute' }}" class="collection-item">Home</a>
+			<a href="{{ pathFor route='newTransRoute' }}" class="collection-item">New Transactions</a>
+			{{#if isInRole 'normal' 'company'}}
+				<a href="{{ pathFor route='historyRoute' }}" class="collection-item">Passbook</a>
+			{{/if}}
+			{{#if isInRole 'admin'}}
+				<a href="{{ pathFor route='requestsRoute' }}" class="collection-item">Manage Users</a>
+			{{/if}}
+			<a href="{{ pathFor route='settingsRoute' }}" class="collection-item">Settings</a>
 		</div>
 	</div>
 </template>

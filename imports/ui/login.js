@@ -32,7 +32,7 @@ Template.Login.events({
 			}
 			else
 			{
-				FlowRouter.go('/');
+				Router.go("homeRoute");
 			}
 		});
 	},

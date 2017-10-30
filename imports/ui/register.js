@@ -48,7 +48,8 @@ Template.Register.events({
 					name: nameVar,
 					contact: contactVar,
 					email: emailVar,
-					balance: 0
+					balance: 0,
+					verified: false,
 				}
 			}, function(error) {
 				if (error) {
@@ -59,7 +60,7 @@ Template.Register.events({
 					var userId = Meteor.userId();
 					Meteor.call('client.insertRole', userId, typeVar);
 					FlashMessages.sendSuccess("Signed up successfully.");
-					FlowRouter.go('/');
+					Router.go('homeRoute');
 				}
 			});
 		}

@@ -32,12 +32,12 @@ Template.NewTrans.events({
 			console.log(result);
 			if (result) {
 				Meteor.call('transactions.insert', fromVar, toVar, amountVar, typeVar);
-				FlowRouter.go('/passbook');
+				Router.go('/passbook');
 				FlashMessages.sendSuccess("Transaction successfull!");
 			}
 			else
 			{
-				FlowRouter.go('/');
+				Router.go('/');
 				FlashMessages.sendWarning("Incorrect Password!");
 			}
 		});

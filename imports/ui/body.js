@@ -17,6 +17,8 @@ import './newTransaction.html';
 import './newTransaction.js';
 import './history.html';
 import './history.js';
+import './requests.html';
+import './requests.js';
 
 Template.body.onCreated(function bodyOnCreated() {
 	// body...
@@ -39,6 +41,6 @@ Template.Header.events({
 	{
 		event.preventDefault();
 		Meteor.logout();
-		FlowRouter.go('/');
+		Router.go('homeRoute');
 	}
 });

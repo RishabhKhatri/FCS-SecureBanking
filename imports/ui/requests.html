@@ -1,0 +1,16 @@
+<template name="Requests">
+	{{#each requests}}
+		{{> Request}}
+	{{/each}}
+</template>
+
+<template name="Request">
+	<div class="card-panel hoverable">
+		<h6>Name: {{profile.name}}</h6>
+		<h6>Email: {{profile.email}}</h6>
+		<h6>Contact: {{profile.contact}}</h6>
+		<button class="btn waves-effect waves-light" type="submit" name="action">Accept
+		<i class="material-icons right">send</i>
+		</button>
+	</div>
+</template>
