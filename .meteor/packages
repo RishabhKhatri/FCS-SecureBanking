@@ -25,5 +25,5 @@ kadira:blaze-layout
 mrt:flash-messages
 themeteorchef:jquery-validation
 alanning:roles
-jquery@1.11.10
 iron:router
+jquery

@@ -19,6 +19,8 @@ import './history.html';
 import './history.js';
 import './requests.html';
 import './requests.js';
+import './add_internal.html';
+import './add_internal.js';
 
 Template.body.onCreated(function bodyOnCreated() {
 	// body...
@@ -42,5 +44,8 @@ Template.Header.events({
 		event.preventDefault();
 		Meteor.logout();
 		Router.go('homeRoute');
+	},
+	'click .button-collapse': function(event){
+	    $('.button-collapse').sideNav();
 	}
 });

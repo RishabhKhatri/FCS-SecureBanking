@@ -1,0 +1,46 @@
+<template name="AddInternal">
+	<div class="card-panel">
+		<div style="padding-top: 10px;" class="row">
+		    <form class="register-form col s12">
+		    	<div class="row">
+					<div class="form-group col s12">
+					  <label for="name">Name</label>
+					  <input id="name" type="text" class="form-control" name="registerName">
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col s12">
+					  <label for="email">Email</label>
+					  <input id="email" type="email" class="form-control" name="registerEmail">
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col s12">
+					  <label for="contact">Contact</label>
+					  <input id="contact" type="text" class="form-control" name="registerContact">
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col s12">
+						<label for="type">Account Type</label>
+						<select class="input-field type-select" name="registerType">
+							<option value="regular">Regular Employee</option>
+							<option value="manager">System Manager</option>
+						</select>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col s12">
+					  <label for="password">Password</label>
+					  <input id="password" type="password" class="form-control" name="registerPass">
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col s12">
+						<input type="submit" class="waves-effect waves-light btn" value="Submit">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</template>

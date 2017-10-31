@@ -2,12 +2,14 @@
 	<div class="sidebar">
 		<div class="collection">
 			<a href="{{ pathFor route='homeRoute' }}" class="collection-item">Home</a>
-			<a href="{{ pathFor route='newTransRoute' }}" class="collection-item">New Transactions</a>
 			{{#if isInRole 'normal' 'company'}}
 				<a href="{{ pathFor route='historyRoute' }}" class="collection-item">Passbook</a>
+				<a href="{{ pathFor route='newTransRoute' }}" class="collection-item">New Transactions</a>
 			{{/if}}
 			{{#if isInRole 'admin'}}
-				<a href="{{ pathFor route='requestsRoute' }}" class="collection-item">Manage Users</a>
+				<a href="{{ pathFor route='addInternalRoute' }}" class="collection-item">Add Internal Account</a>
+				<a href="{{ pathFor route='requestsRoute' }}" class="collection-item">Manage Requests</a>
+				<a href="{{ pathFor route='manageRoute' }}" class="collection-item">Manage Users</a>
 			{{/if}}
 			<a href="{{ pathFor route='settingsRoute' }}" class="collection-item">Settings</a>
 		</div>
