@@ -72,5 +72,22 @@ Meteor.methods({
 				verified: true,
 			}
 		});
+	},
+	'admin.check_pass'(digest)
+	{
+		check(digest, String);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), "admin")) {
+			throw new Meteor.Error("Not authorized");
+			FlashMessages.sendError("Not authorized.");
+			return false;
+		}
+
+		var user = Meteor.user();
+		var password = {digest: digest, algorithm: 'sha-256'};
+		if (Meteor.isServer) {
+			var result = Accounts._checkPassword(user, password);
+			return result.error == null;
+		}
 	}
 });

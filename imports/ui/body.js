@@ -21,6 +21,10 @@ import './requests.html';
 import './requests.js';
 import './add_internal.html';
 import './add_internal.js';
+import './manage_accounts.html';
+import './manage_accounts.js';
+import './transaction_requests.html';
+import './transaction_requests.js';
 
 Template.body.onCreated(function bodyOnCreated() {
 	// body...

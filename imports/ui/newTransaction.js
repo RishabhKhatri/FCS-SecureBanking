@@ -4,6 +4,33 @@ import { Meteor } from 'meteor/meteor';
 import { Transactions } from '../api/transactions.js'
 import './newTransaction.html';
 
+Template.NewTrans.onRendered(function() {
+	// body...
+	$('.register-form').validate({
+		rules:
+		{
+			transFrom: {
+				email: true,
+				required: true,
+			},
+			transTo: {
+				required: true,
+				email: true,
+			},
+			transAmount: {
+				required: true,
+				number: true,
+			},
+			transType: {
+				required: true,
+			},
+			transPass: {
+				required: true,
+			}
+		}
+	});
+});
+
 Template.NewTrans.events({
 	'change .type-select'(event)
 	{
@@ -29,15 +56,21 @@ Template.NewTrans.events({
 		var typeVar = target.transType.value;
 		var passVar = Package.sha.SHA256(target.transPass.value);
 		Meteor.call('transactions.check_pass', passVar, function(err, result) {
-			console.log(result);
 			if (result) {
-				Meteor.call('transactions.insert', fromVar, toVar, amountVar, typeVar);
-				Router.go('/passbook');
-				FlashMessages.sendSuccess("Transaction successfull!");
+				Meteor.call('transactions.request', fromVar, toVar, amountVar, typeVar, function(err, result) {
+					if (err) {
+						FlashMessages.sendError(err);
+						Router.go("homeRoute");
+					}
+					else {
+						Router.go('historyRoute');
+						FlashMessages.sendSuccess("Transaction requested!");
+					}
+				});
 			}
 			else
 			{
-				Router.go('/');
+				Router.go('homeRoute');
 				FlashMessages.sendWarning("Incorrect Password!");
 			}
 		});

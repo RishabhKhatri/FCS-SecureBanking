@@ -1,0 +1,27 @@
+<template name="TransRequests">
+	{{#if requestCount}}
+		<div class="card-panel">
+			<h4>No requests :D</h4>
+		</div>
+	{{else}}
+		{{#each requests}}
+			{{> TransRequest}}
+		{{/each}}
+	{{/if}}
+</template>
+
+<template name="TransRequest">
+	<div class="card-panel">
+		<h5>From: {{from}}</h5>
+		<h5>To: {{to}}</h5>
+		<h5>Amount: {{amount}}</h5>
+		<h5>Type: {{type}}</h5>
+		<h5>Issued on: {{readable_date}}</h5>
+		<button class="btn waves-effect waves-light accept" type="submit" name="action">Approve
+		<i class="material-icons right">check</i>
+		</button>
+		<button class="btn waves-effect waves-light red reject" type="submit" name="action">Reject
+		<i class="material-icons right">clear</i>
+		</button>
+	</div>
+</template>

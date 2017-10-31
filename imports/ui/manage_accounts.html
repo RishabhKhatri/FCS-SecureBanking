@@ -1,0 +1,29 @@
+<template name="ManageAccounts">
+	<div class="row">
+		<div class="col-sm-6">
+			<div class="card-panel">
+				<h4>Internal Users</h4>
+				{{#each internal_accounts}}
+					{{> Account}}
+				{{/each}}
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<div class="card-panel">
+				<h4>External Users</h4>
+				{{#each external_accounts}}
+					{{> Account}}
+				{{/each}}
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="Account">
+	<div class="card-panel hoverable">
+		<h5>Name: {{profile.name}}</h5>
+		<h6>Email: {{profile.email}}</h6>
+		<h6>Contact: {{profile.contact}}</h6>
+		<h6>Created on: {{readable_date}}</h6>
+	</div>
+</template>

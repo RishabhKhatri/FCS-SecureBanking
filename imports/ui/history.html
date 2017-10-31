@@ -1,5 +1,5 @@
 <template name="History">
-	<div class="card-panel hoverable">
+	<div class="card-panel">
 		<h4>Current Balance: {{currentUser.profile.balance}}</h4>
 	</div>
 	{{#each transactions}}
@@ -12,8 +12,13 @@
 		<h6>From: {{from}}</h6>
 		<h6>To: {{to}}</h6>
 		<h6>Amount: {{amount}}</h6>
+		{{#if verified}}
 		<h6>Balance before: {{prev_balance}}</h6>
 		<h6>Balance after: {{current_balance}}</h6>
+		<h6><strong>Status: {{status}}</strong></h6>
+		{{else}}
+		<h6><strong>Status: {{status}}</strong></h6>
+		{{/if}}
 		<h6>Transaction type: {{type}}</h6>
 		<h6>Date: {{readable_date}}</h6>
 	</div>

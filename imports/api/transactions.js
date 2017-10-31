@@ -7,63 +7,41 @@ export const Transactions = new Mongo.Collection('transactions');
 
 if (Meteor.isServer) {
 	Meteor.publish('transactions', function transactionsPublication() {
-		// body...
+		if (Roles.userIsInRole(Meteor.userId(), "admin")) {
+			return Transactions.find();
+		}
 		return Transactions.find({ owner: this.userId });
 	})
 }
 
 Meteor.methods({
-	'transactions.insert'(from, to, amount, type)
+	'transactions.request'(from, to, amount, type)
 	{
 		check(from, String);
 		check(to, String);
 		check(amount, Number);
 		check(type, String);
 
-		if (!Meteor.userId()) {
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["normal", "company"])) {
 			throw new Meteor.Error("Not authorized");
 		}
 
 		if (type.toLowerCase() == "debit") {
 			if (Meteor.isServer) {
 				const to_user = Accounts.findUserByEmail(to);
+				if (amount>Meteor.user().profile.balance) {
+					throw new Meteor.Error("Insufficient balance!");
+				}
 				if (to_user) {
-					from = Meteor.user().profile.email;
-					var prev_balance_;
-					var current_balance = Meteor.user().profile.balance;
-					if (amount>current_balance) {
-						throw new Meteor.Error("Insufficient balance!");
-					}
-					prev_balance = current_balance;
-					current_balance -= amount;
-					console.log(current_balance);
-					Meteor.users.update(Meteor.userId(), {$set: { "profile.balance": current_balance }});
-					type="Debit";
 					Transactions.insert({
 						from,
 						to,
 						amount,
-						prev_balance,
-						current_balance,
-						type,
+						type: "Debit",
+						verified: false,
+						status: "Pending",
 						createdAt: new Date(),
 						owner: Meteor.userId(),
-					});
-					current_balance = to_user.profile.balance;
-					prev_balance = current_balance;
-					current_balance += amount;
-					console.log(current_balance);
-					Meteor.users.update(to_user._id, {$set: { "profile.balance": current_balance }});
-					type = "Credit";
-					Transactions.insert({
-						from,
-						to,
-						amount,
-						prev_balance,
-						current_balance,
-						type,
-						createdAt: new Date(),
-						owner: to_user._id,
 					});
 				}
 				else
@@ -72,43 +50,88 @@ Meteor.methods({
 				}
 			}
 		}
-		else if(type.toLowerCase() == 'credit')
+		else
 		{
-			from=Meteor.user().profile.email;
-			to=Meteor.user().profile.email;
-			var prev_balance;
-			var current_balance = Meteor.user().profile.balance;
-			prev_balance = current_balance;
-			current_balance += amount;
-			console.log(current_balance);
-			Meteor.users.update(Meteor.userId(), {$set: { "profile.balance": current_balance }});
-			type="Credit";
 			Transactions.insert({
-				from,
-				to,
+				from: Meteor.user().profile.email,
+				to: Meteor.user().profile.email,
 				amount,
-				prev_balance,
-				current_balance,
-				type,
+				type: "Credit",
+				verified: false,
+				status: "Pending",
 				createdAt: new Date(),
 				owner: Meteor.userId(),
 			});
 		}
 	},
-	'transactions.remove'(transactionId)
+	'transactions.insert'(id, from, to, amount, type)
 	{
-		check(transactionId, String);
+		check(id, String);
+		check(from, String);
+		check(to, String);
+		check(amount, Number);
+		check(type, String);
 
-		if (!Meteor.userId()) {
-			throw new Meteor.Error('not-authorized');
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), "admin")) {
+			throw new Meteor.Error("Not authorized");
 		}
 
-		const transaction = Transactions.findOne(transactionId);
-		if (Meteor.userId() != transaction.owner) {
-			throw new Meteor.Error('not-authorized');
+		if (type.toLowerCase() == "debit") {
+			if (Meteor.isServer) {
+				const from_user = Accounts.findUserByEmail(from);
+				const to_user = Accounts.findUserByEmail(to);
+				var prev_balance;
+				var current_balance = from_user.profile.balance;
+				prev_balance = current_balance;
+				current_balance -= amount;
+				console.log(current_balance);
+				Meteor.users.update(from_user._id, {$set: { "profile.balance": current_balance }});
+				type="Debit";
+				Transactions.update(id, {$set: {
+					prev_balance: prev_balance,
+					current_balance: current_balance,
+					verified: true,
+					status: "Accepted",
+				}});
+				current_balance = to_user.profile.balance;
+				prev_balance = current_balance;
+				current_balance += amount;
+				console.log(current_balance);
+				Meteor.users.update(to_user._id, {$set: { "profile.balance": current_balance }});
+				type = "Credit";
+				Transactions.insert({
+					from,
+					to,
+					amount,
+					prev_balance,
+					current_balance,
+					type,
+					verified: true,
+					status: "Accepted",
+					createdAt: new Date(),
+					owner: to_user._id,
+				});
+			}
 		}
-
-		Transactions.remove(transactionId);
+		else if(type.toLowerCase() == 'credit')
+		{
+			if (Meteor.isServer) {
+				const from_user = Accounts.findUserByEmail(from);
+				var prev_balance;
+				var current_balance = from_user.profile.balance;
+				prev_balance = current_balance;
+				current_balance += amount;
+				console.log(current_balance);
+				Meteor.users.update(from_user._id, {$set: { "profile.balance": current_balance }});
+				type="Credit";
+				Transactions.update(id, {$set: {
+					prev_balance: prev_balance,
+					current_balance: current_balance,
+					verified: true,
+					status: "Accepted",
+				}});
+			}
+		}
 	},
 	'transactions.check_pass'(digest)
 	{
@@ -127,5 +150,15 @@ Meteor.methods({
 				return result.error == null;
 			}
 		}
+	},
+	'transactions.reject'(id)
+	{
+		check(id, String);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), "admin")) {
+			throw new Meteor.Error("Not authorized");
+		}
+		
+		Transactions.update(id, {$set: {status: "Rejected"}});
 	}
 });

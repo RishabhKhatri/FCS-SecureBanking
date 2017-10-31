@@ -39,18 +39,28 @@ Template.AddInternal.events({
 		var contactVar = event.target.registerContact.value;
 		var passVar = event.target.registerPass.value;
 		var typeVar = event.target.registerType.value;
+		var adminVar = Package.sha.SHA256(event.target.adminPass.value);
 		if ((/^[789]\d{9}$/.test(contactVar))) {
-			Meteor.call('client.addAccount', emailVar, nameVar, contactVar, passVar, function(err, result)
+			Meteor.call('admin.check_pass', adminVar, function(err, result)
 			{
-				if (err) {
-					FlashMessages.sendError(err.reason);
-					Router.go("homeRoute");
+				if (result) {
+					Meteor.call('client.addAccount', emailVar, nameVar, contactVar, passVar, function(err, result)
+					{
+						if (err) {
+							FlashMessages.sendError(err.reason);
+							Router.go("homeRoute");
+						}
+						else
+						{
+							Meteor.call('client.insertRole', result, typeVar);
+							Router.go("homeRoute");
+							FlashMessages.sendSuccess("User added successfully");
+						}
+					});
 				}
-				else
-				{
-					Meteor.call('client.insertRole', result, typeVar);
+				else{
 					Router.go("homeRoute");
-					FlashMessages.sendSuccess("User added successfully");
+					FlashMessages.sendError("Wrong password!");
 				}
 			});
 		}
