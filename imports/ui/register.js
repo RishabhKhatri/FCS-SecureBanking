@@ -1,5 +1,6 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import { Email } from 'meteor/email';
 
 import '../api/collections.js';
 import './register.html';
@@ -57,6 +58,12 @@ Template.Register.events({
 				}
 				else
 				{
+					Meteor.call('client.sendSMS', contactVar, function(err)
+					{
+						if (err) {
+							console.log(err);
+						}
+					});
 					var userId = Meteor.userId();
 					Meteor.call('client.insertRole', userId, typeVar);
 					FlashMessages.sendSuccess("Signed up successfully.");

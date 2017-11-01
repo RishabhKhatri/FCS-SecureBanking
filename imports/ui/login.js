@@ -28,7 +28,6 @@ Template.Login.events({
 		Meteor.loginWithPassword(emailVar, passVar, function(error) {
 			if (error) {
 				FlashMessages.sendError(error.reason);
-				console.log(error.reason);
 			}
 			else
 			{
@@ -36,4 +35,13 @@ Template.Login.events({
 			}
 		});
 	},
+	// 'focus .pass'(event)
+	// {
+	// 	$('#keyboard').keyboard({
+	// 		layout: 'num',
+	// 		restrictInput: true,
+	// 		preventPaste: true,
+	// 		autoAccept: true,
+	// 	});
+	// }
 });

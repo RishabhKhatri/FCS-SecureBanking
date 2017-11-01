@@ -11,6 +11,6 @@ Meteor.startup(function() {
     });
     var admin = Accounts.findUserByEmail("admin@bank.com");
     Roles.addUsersToRoles(admin._id, ['admin']);
-    console.log(admin._id);
+    process.env.MAIL_URL = "smtp://postmaster%40mg.rishabhkhatri.com:6cafe5b65fac8d3f59a4d4c1797df16e@smtp.mailgun.org:587"
   }
 });

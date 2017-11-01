@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
+import { Email } from 'meteor/email';
 
 export const Transactions = new Mongo.Collection('transactions');
 
@@ -33,7 +34,7 @@ Meteor.methods({
 					throw new Meteor.Error("Insufficient balance!");
 				}
 				if (to_user) {
-					Transactions.insert({
+					return Transactions.insert({
 						from,
 						to,
 						amount,
@@ -52,7 +53,7 @@ Meteor.methods({
 		}
 		else
 		{
-			Transactions.insert({
+			return Transactions.insert({
 				from: Meteor.user().profile.email,
 				to: Meteor.user().profile.email,
 				amount,
@@ -159,6 +160,74 @@ Meteor.methods({
 			throw new Meteor.Error("Not authorized");
 		}
 		
-		Transactions.update(id, {$set: {status: "Rejected"}});
+		Transactions.update(id, {$set: {status: "Rejected", verified: true,}});
+	},
+	'transactions.sendOTP'(id)
+	{
+		check(id, String);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["normal", "company"])) {
+			throw new Meteor.Error("Not authorized");
+			return false;
+		}
+
+		const OTP = Math.floor(100000 + Math.random() * 900000);
+		const body = "<p>Here is your OTP: <strong>" + OTP + "</strong>.</p>";
+
+		Email.send({
+			to: Meteor.user().profile.email,
+			from: "admin@fcsbank.com",
+			subject: "Email used for registration.",
+			html: body,
+		});
+		Transactions.update(id, {$set: {
+			otp: OTP,
+			otpVerified: false,
+		}});
+	},
+	'transactions.checkOTP'(id, otpVer)
+	{
+		check(id, String);
+		check(otpVer, Number);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["normal", "company"])) {
+			throw new Meteor.Error("Not authorized");
+			return false;
+		}
+
+		const OTP = Transactions.findOne(id).otp;
+		if (OTP === otpVer) {
+			Transactions.update(id, {$set: {
+				otpVerified: true,
+			}});
+			return true;
+		}
+		else{
+			Transactions.remove(id);
+			return false;
+		}
+	},
+	'transactions.removeOTP'()
+	{
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["normal", "company"])) {
+			throw new Meteor.Error("Not authorized");
+			return false;
+		}
+
+		Transactions.find({otpVerified: {$eq: false}}).forEach(function(element) {
+			Transactions.remove(element._id);
+			console.log(element._id);
+		});
+	},
+	'transactions.remove'(id)
+	{
+		check(id, String);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["normal", "company"])) {
+			throw new Meteor.Error("Not authorized");
+			return false;
+		}
+
+		Transactions.remove(id);
 	}
 });

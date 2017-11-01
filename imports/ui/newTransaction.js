@@ -1,11 +1,11 @@
 import { Template } from 'meteor/templating';
 import { Meteor } from 'meteor/meteor';
+import { ReactiveVar } from 'meteor/reactive-var';
 
 import { Transactions } from '../api/transactions.js'
 import './newTransaction.html';
 
 Template.NewTrans.onRendered(function() {
-	// body...
 	$('.register-form').validate({
 		rules:
 		{
@@ -29,6 +29,11 @@ Template.NewTrans.onRendered(function() {
 			}
 		}
 	});
+	$('.modal').modal();
+});
+
+Template.NewTrans.onCreated(function() {
+	this.transactionId = new ReactiveVar(null);
 });
 
 Template.NewTrans.events({
@@ -46,7 +51,7 @@ Template.NewTrans.events({
 			document.getElementById("to").disabled = false;
 		}
 	},
-	'submit form'(event)
+	'submit .register-form'(event, template)
 	{
 		event.preventDefault();
 		const target = event.target;
@@ -63,8 +68,11 @@ Template.NewTrans.events({
 						Router.go("homeRoute");
 					}
 					else {
-						Router.go('historyRoute');
-						FlashMessages.sendSuccess("Transaction requested!");
+						Meteor.call('transactions.sendOTP', result);
+						template.transactionId.set(result);
+						document.getElementById("otpbutton").click();
+						// Router.go('historyRoute');
+						// FlashMessages.sendSuccess("Transaction requested!");
 					}
 				});
 			}
@@ -75,4 +83,39 @@ Template.NewTrans.events({
 			}
 		});
 	},
+	'submit .otp-form'(event)
+	{
+		event.preventDefault();
+		console.log(event);
+		const target = event.target;
+		const otpVal = target.transOTP.value;
+		Meteor.call('transactions.checkOTP', Template.instance().transactionId.get(), Number(otpVal), function(err, result)
+		{
+			if (err) {
+				FlashMessages.sendError(err);
+				Router.go('homeRoute');
+			}
+			else
+			{
+				if (result) {
+					FlashMessages.sendSuccess("OTP verified");
+					Router.go('historyRoute');
+				}
+				else
+				{
+					FlashMessages.sendSuccess("Incorrect OTP!");
+					Router.go('homeRoute');
+				}
+			}
+		})
+	},
+	'focus #otp_input'(event)
+	{
+		$('#otp_input').keyboard({
+			layout: 'num',
+			restrictInput: true,
+			preventPaste: true,
+			autoAccept: true,
+		});
+	}
 });

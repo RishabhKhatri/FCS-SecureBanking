@@ -2,24 +2,19 @@
 	<div class="card-panel">
 		Admin: admin@bank.com, password: admin@123
 	</div>
-	<div style="padding-top: 10px;" class="container" role="tabpanel">
-		<!-- Nav tabs -->
-		<ul class="nav nav-tabs" role="tablist">
-			<li role="presentation" class="active">
-				<a href="#login" aria-controls="login" role="tab" data-toggle="tab"><i class="fa fa-sign-in" aria-hidden="true"></i> Log in</a>
-			</li>
-			<li role="presentation">
-				<a href="#register" aria-controls="register" role="tab" data-toggle="tab"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a>
-			</li>
+	<div class="container">
+		<ul id="tabs-swipe-demo .tabs-fixed-width" class="tabs">
+			<li class="tab col s3"><a class="active" href="#test-swipe-1"><i class="fa fa-sign-in" aria-hidden="true"></i> Log in</a></li>
+			<li class="tab col s3"><a href="#test-swipe-2"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
 		</ul>
-	
-		<!-- Tab panes -->
-		<div class="tab-content card-panel hoverable">
-			<div role="tabpanel" class="tab-pane active" id="login">
-				{{> Login}}
+		<div id="test-swipe-1" class="col s12">
+			<div class="card-panel">
+				{{> Login}}			
 			</div>
-			<div role="tabpanel" class="tab-pane" id="register">
-				{{> Register}}
+		</div>
+		<div id="test-swipe-2" class="col s12">
+			<div class="card-panel">
+				{{> Register}}			
 			</div>
 		</div>
 	</div>

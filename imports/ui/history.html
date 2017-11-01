@@ -21,5 +21,10 @@
 		{{/if}}
 		<h6>Transaction type: {{type}}</h6>
 		<h6>Date: {{readable_date}}</h6>
+		{{#if isRejected}}
+			<button class="btn waves-effect waves-light red reject" type="submit" name="action">Remove
+			<i class="material-icons right">clear</i>
+			</button>
+		{{/if}}
 	</div>
 </template>

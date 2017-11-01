@@ -19,4 +19,16 @@ Template.Transaction.helpers({
 	{
 		return this.createdAt.toDateString();
 	},
+	isRejected()
+	{
+		return this.status === "Rejected";
+	}
+});
+
+Template.Transaction.events({
+	'click .reject'()
+	{
+		Meteor.call('transactions.remove', this._id);
+		Router.go('historyRoute');
+	}
 });

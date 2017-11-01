@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
+import { Email } from 'meteor/email';
 
 if (Meteor.isServer) {
 	Meteor.publish('Users', function userPublication() {
