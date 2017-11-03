@@ -1,90 +1,17 @@
-import { Template } from 'meteor/templating';
-import { Meteor } from 'meteor/meteor';
-import { Transactions } from '../api/transactions.js';
+/* FileSaver.js
+ * A saveAs() FileSaver implementation.
+ * 1.3.2
+ * 2016-06-16 18:25:19
+ *
+ * By Eli Grey, http://eligrey.com
+ * License: MIT
+ *   See https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md
+ */
 
-Template.History.onCreated(function bodyOnCreated() {
-	Meteor.subscribe('transactions');
-});
+/*global self */
+/*jslint bitwise: true, indent: 4, laxbreak: true, laxcomma: true, smarttabs: true, plusplus: true */
 
-Template.History.helpers({
-	transactions()
-	{
-		return Transactions.find({}, { sort: { createdAt: -1 } });
-	},
-});
-
-Template.History.events({
-	'click .download'(event)
-	{
-		var data = Transactions.find().fetch();
-		var csvData = JSON2CSV(data);
-		var blob = new Blob([csvData], 
-                    {type: "text/csv;charset=utf-8"});
-		saveAs(blob, "statement.csv");
-	}
-});
-
-Template.Transaction.helpers({
-	readable_date()
-	{
-		return this.createdAt.toDateString();
-	},
-	isRejected()
-	{
-		return this.status === "Rejected";
-	}
-});
-
-Template.Transaction.events({
-	'click .reject'()
-	{
-		Meteor.call('transactions.remove', this._id);
-		Router.go('historyRoute');
-	}
-});
-
-function JSON2CSV(objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-
-    var str = '';
-    var line = '';
-
-    if ($("#labels").is(':checked')) {
-        var head = array[0];
-        if ($("#quote").is(':checked')) {
-            for (var index in array[0]) {
-                var value = index + "";
-                line += '"' + value.replace(/"/g, '""') + '",';
-            }
-        } else {
-            for (var index in array[0]) {
-                line += index + ',';
-            }
-        }
-
-        line = line.slice(0, -1);
-        str += line + '\r\n';
-    }
-
-    for (var i = 0; i < array.length; i++) {
-        var line = '';
-
-        if ($("#quote").is(':checked')) {
-            for (var index in array[i]) {
-                var value = array[i][index] + "";
-                line += '"' + value.replace(/"/g, '""') + '",';
-            }
-        } else {
-            for (var index in array[i]) {
-                line += array[i][index] + ',';
-            }
-        }
-
-        line = line.slice(0, -1);
-        str += line + '\r\n';
-    }
-    return str;   
-}
+/*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
 
 var saveAs = saveAs || (function(view) {
 	"use strict";

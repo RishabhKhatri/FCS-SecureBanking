@@ -1,6 +1,9 @@
 <template name="History">
 	<div class="card-panel">
 		<h4>Current Balance: {{currentUser.profile.balance}}</h4>
+		<button class="btn waves-effect waves-light reject download" type="submit" name="action">Download Banking Statement
+		<i class="material-icons right">file_download</i>
+		</button>
 	</div>
 	{{#each transactions}}
 		{{> Transaction}}
