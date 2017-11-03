@@ -2,20 +2,35 @@
 	<div class="card-panel hoverable">
 		{{#if isInRole 'normal'}}
 			<h3>User Profle:</h3>
-			<h4>Name: {{currentUser.profile.name}}</h4>
+			<h5>Name: {{currentUser.profile.name}}</h5>
 			<h5>Email: {{currentUser.profile.email}}</h5>
 			<h5>Contact: {{currentUser.profile.contact}}</h5>
+			<h5><strong>Normal User</strong></h5>
 		{{/if}}
 		{{#if isInRole 'company'}}
-			<h3>Company Profle:</h3>
-			<h4>Name: {{currentUser.profile.name}}</h4>
+			<h3>User Profle:</h3>
+			<h5>Name: {{currentUser.profile.name}}</h5>
 			<h5>Email: {{currentUser.profile.email}}</h5>
 			<h5>Contact: {{currentUser.profile.contact}}</h5>
+			<h5><strong>Company Profile</strong></h5>
 		{{/if}}
 		{{#if isInRole 'admin'}}
-			<h3>Admin Profle:</h3>
-			<h4>Name: {{currentUser.profile.name}}</h4>
+			<h3>User Profle:</h3>
+			<h5>Name: {{currentUser.profile.name}}</h5>
 			<h5>Email: {{currentUser.profile.email}}</h5>
+			<h5><strong>Admin</strong></h5>
+		{{/if}}
+		{{#if isInRole 'regular'}}
+			<h3>User Profle:</h3>
+			<h5>Name: {{currentUser.profile.name}}</h5>
+			<h5>Email: {{currentUser.profile.email}}</h5>
+			<h5><strong>Regular Employee</strong></h5>
+		{{/if}}
+		{{#if isInRole 'manager'}}
+			<h3>User Profle:</h3>
+			<h5>Name: {{currentUser.profile.name}}</h5>
+			<h5>Email: {{currentUser.profile.email}}</h5>
+			<h5><strong>System Manager</strong></h5>
 		{{/if}}
 	</div>
 </template>

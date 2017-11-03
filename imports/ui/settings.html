@@ -1,0 +1,52 @@
+<template name="Settings">
+	<div class="card-panel">
+		{{#if isRequest}}
+			<h4>Your profile change request is pending...</h4>
+		{{else}}
+			{{#if isChange}}
+				<div style="padding-top: 10px;" class="row">
+				    <form class="register-form col s12">
+				    	<div class="row">
+							<div class="form-group col s12">
+							  <label for="name">Name</label>
+							  <input id="name" type="text" class="form-control" value="{{form_data.profile.name}}" name="registerName">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col s12">
+							  <label for="email">Email</label>
+							  <input id="email" type="email" class="form-control" disabled value="{{form_data.profile.email}}" name="registerEmail">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col s12">
+							  <label for="contact">Contact</label>
+							  <input id="contact" type="text" class="form-control" value="{{form_data.profile.contact}}" name="registerContact">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col s12">
+							  <label for="new_password">New Password</label>
+							  <input id="new_password" type="password" class="form-control" name="newPass">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col s12">
+							  <label for="password">Current Password</label>
+							  <input id="password" type="password" class="form-control" name="currentPass">
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col s12">
+								<input type="submit" class="waves-effect waves-light btn" value="Submit">
+							</div>
+						</div>
+					</form>
+				</div>
+			{{else}}
+				<h4>Request Profile Change:</h4>
+				<button class="btn waves-effect waves-light request" type="submit" name="action">Request</button>
+			{{/if}}
+		{{/if}}
+	</div>
+</template>

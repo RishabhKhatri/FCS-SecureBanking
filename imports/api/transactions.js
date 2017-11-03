@@ -8,8 +8,11 @@ export const Transactions = new Mongo.Collection('transactions');
 
 if (Meteor.isServer) {
 	Meteor.publish('transactions', function transactionsPublication() {
-		if (Roles.userIsInRole(Meteor.userId(), "admin")) {
+		if (Roles.userIsInRole(Meteor.userId(), ["admin", "manager"])) {
 			return Transactions.find();
+		}
+		if (Roles.userIsInRole(Meteor.userId(), "regular")) {
+			return Transactions.find({ amount: {$lt: 50000} });
 		}
 		return Transactions.find({ owner: this.userId });
 	})
@@ -73,7 +76,7 @@ Meteor.methods({
 		check(amount, Number);
 		check(type, String);
 
-		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), "admin")) {
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["admin", "regular", "manager"])) {
 			throw new Meteor.Error("Not authorized");
 		}
 
@@ -156,7 +159,7 @@ Meteor.methods({
 	{
 		check(id, String);
 
-		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), "admin")) {
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["admin", "regular", "manager"])) {
 			throw new Meteor.Error("Not authorized");
 		}
 		

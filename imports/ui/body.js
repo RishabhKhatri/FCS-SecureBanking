@@ -7,7 +7,6 @@ import '../api/collections.js';
 import './body.html';
 import './register.html';
 import './login.html';
-import './get_started.html';
 import './home.html';
 import './register.js';
 import './login.js';
@@ -25,6 +24,8 @@ import './manage_accounts.html';
 import './manage_accounts.js';
 import './transaction_requests.html';
 import './transaction_requests.js';
+import './settings.html';
+import './settings.js';
 
 Template.body.onCreated(function bodyOnCreated() {
 	// body...

@@ -6,7 +6,7 @@ import { Email } from 'meteor/email';
 if (Meteor.isServer) {
 	Meteor.publish('Users', function userPublication() {
 		return Meteor.users.find();
-	})
+	});
 }
 
 Meteor.methods({
@@ -69,7 +69,6 @@ Meteor.methods({
 				name: nameVar,
 				contact: contactVar,
 				email: emailVar,
-				balance: 0,
 				verified: true,
 			}
 		});
@@ -90,5 +89,68 @@ Meteor.methods({
 			var result = Accounts._checkPassword(user, password);
 			return result.error == null;
 		}
+	},
+	'client.check_captcha'(captchaData)
+	{
+		var verifyCaptchaResponse = reCAPTCHA.verifyCaptcha(this.connection.clientAddress, captchaData);
+
+        if (!verifyCaptchaResponse.success) {
+            console.log('reCAPTCHA check failed!', verifyCaptchaResponse);
+            throw new Meteor.Error(422, 'reCAPTCHA Failed: ' + verifyCaptchaResponse.error);
+        } else
+            console.log('reCAPTCHA verification passed!');
+        return true;
+	},
+	'client.request'()
+	{
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["normal", "company"])) {
+			throw new Meteor.Error("Not authorized");
+			FlashMessages.sendError("Not authorized.");
+			return false;
+		}
+
+		Meteor.users.update({_id: Meteor.userId()}, {$set: {"profile.change_request": false, "profile.request_sent": true}});
+	},
+	'client.accept_request'(userId)
+	{
+		check(userId, String);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["admin", "regular"])) {
+			throw new Meteor.Error("Not authorized");
+			FlashMessages.sendError("Not authorized.");
+			return false;
+		}
+
+		Meteor.users.update({_id: userId}, {$set: {"profile.change_request": true, "profile.request_sent": false}});
+	},
+	'client.reject_request'(userId)
+	{
+		check(userId, String);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["admin", "regular"])) {
+			throw new Meteor.Error("Not authorized");
+			FlashMessages.sendError("Not authorized.");
+			return false;
+		}
+
+		Meteor.users.update({_id: userId}, {$set: {"profile.change_request": false, "profile.request_sent": false}});
+	},
+	'client.update'(name, contact)
+	{
+		check(name, String);
+		check(contact, String);
+
+		if (!Meteor.userId() && Roles.userIsInRole(Meteor.userId(), ["normal", "company"])) {
+			throw new Meteor.Error("Not authorized");
+			FlashMessages.sendError("Not authorized.");
+			return false;
+		}
+
+		Meteor.users.update({_id: Meteor.userId()}, {$set: {
+			"profile.name": name,
+			"profile.contact": contact,
+			"profile.change_request": false,
+			"profile.request_sent": false,
+		}});
 	}
 });

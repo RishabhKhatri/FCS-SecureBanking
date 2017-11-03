@@ -6,27 +6,134 @@ Template.Requests.onCreated(function bodyOnCreated() {
 });
 
 Template.Requests.helpers({
-	requests()
+	new_requests()
 	{
-		return Meteor.users.find({"profile.verified": {$eq: false}}, { sort: { createdAt: -1 } });
+		if (Roles.userIsInRole(Meteor.userId(), "admin")) {
+			return Meteor.users.find({
+				$and: [
+					{
+						$or: [
+							{roles: "normal"},
+							{roles: "company"},
+							{roles: "regular"},
+							{roles: "manager"}
+						]
+					},
+					{"profile.verified": {$eq: false}}
+				]
+			}, { sort: { createdAt: -1 } });
+		}
+		else
+		{
+			return null;
+		}
 	},
-	requestsCount()
+	new_requestsCount()
 	{
-		return Meteor.users.find({"profile.verified": {$eq: false}}, { sort: { createdAt: -1 } }).count() == 0;	
+		if (Roles.userIsInRole(Meteor.userId(), "admin")) {
+			return Meteor.users.find({
+				$and: [
+					{
+						$or: [
+							{roles: "normal"},
+							{roles: "company"},
+							{roles: "regular"},
+							{roles: "manager"}
+						]
+					},
+					{"profile.verified": {$eq: false}}
+				]
+			}, { sort: { createdAt: -1 } }).count()==0;
+		}
+		else
+		{
+			return true;
+		}
+	},
+	edit_requests()
+	{
+		if (Roles.userIsInRole(Meteor.userId(), "admin")) {
+			return Meteor.users.find({
+				$and: [
+					{
+						$or: [
+							{roles: "normal"},
+							{roles: "company"},
+							{roles: "regular"},
+							{roles: "manager"}
+						]
+					},
+					{"profile.request_sent": {$eq: true}}
+				]
+			}, { sort: { createdAt: -1 } });
+		}
+		else if (Roles.userIsInRole(Meteor.userId(), "regular"))
+		{
+			return Meteor.users.find({
+				$and: [
+					{
+						$or: [
+							{roles: "normal"},
+							{roles: "company"}
+						]
+					},
+					{"profile.request_sent": {$eq: true}}
+				]
+			}, { sort: { createdAt: -1 } });
+		}
+		else
+		{
+			return null;
+		}
+	},
+	edit_requestsCount()
+	{
+		if (Roles.userIsInRole(Meteor.userId(), "admin")) {
+			return Meteor.users.find({
+				$and: [
+					{
+						$or: [
+							{roles: "normal"},
+							{roles: "company"},
+							{roles: "regular"},
+							{roles: "manager"}
+						]
+					},
+					{"profile.request_sent": {$eq: true}}
+				]
+			}, { sort: { createdAt: -1 } }).count()==0;
+		}
+		else if (Roles.userIsInRole(Meteor.userId(), "regular"))
+		{
+			return Meteor.users.find({
+				$and: [
+					{
+						$or: [
+							{roles: "normal"},
+							{roles: "company"}
+						]
+					},
+					{"profile.request_sent": {$eq: true}}
+				]
+			}, { sort: { createdAt: -1 } }).count()==0;
+		}
+		else
+		{
+			return true;
+		}
 	}
 });
 
-Template.Request.helpers({
+Template.NewRequest.helpers({
 	readable_date()
 	{
 		return this.createdAt.toDateString();
 	},
 });
 
-Template.Request.events({
+Template.NewRequest.events({
 	'click .accept'()
 	{
-		console.log("accepted");
 		Meteor.call('client.verify', this._id, function(err, result) {
 			if (result) {
 				Router.go("requestsRoute");
@@ -39,7 +146,6 @@ Template.Request.events({
 	},
 	'click .reject'()
 	{
-		console.log("removed");
 		Meteor.call('client.remove', this._id, function(err, result) {
 			if (result) {
 				Router.go("requestsRoute");
@@ -47,6 +153,42 @@ Template.Request.events({
 			}
 			else {
 				Router.go("homeRoute");
+			}
+		});
+	}
+});
+
+Template.EditRequest.helpers({
+	readable_date()
+	{
+		return this.createdAt.toDateString();
+	},
+});
+
+Template.EditRequest.events({
+	'click .accept'()
+	{
+		Meteor.call('client.accept_request', this._id, function(err) {
+			if (err) {
+				FlashMessages.sendError(err);
+				Router.go("homeRoute");
+			}
+			else {
+				Router.go("requestsRoute");
+				FlashMessages.sendSuccess("Successfully accepted.");
+			}
+		});
+	},
+	'click .reject'()
+	{
+		Meteor.call('client.reject_request', this._id, function(err) {
+			if (err) {
+				FlashMessages.sendError(err);
+				Router.go("homeRoute");
+			}
+			else {
+				Router.go("requestsRoute");
+				FlashMessages.sendSuccess("Successfully rejected.");
 			}
 		});
 	}

@@ -27,3 +27,9 @@ alanning:roles
 iron:router
 jquery
 email
+altapp:recaptcha
+nourharidy:ssl
+ejson
+vazco:universe-html-purifier
+ostrio:logger
+ostrio:loggermongo

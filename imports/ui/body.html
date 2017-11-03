@@ -29,11 +29,13 @@
 			<a href="{{ pathFor route='homeRoute' }}" class="brand-logo">Secure Banking</a>
 			<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
 			<ul class="right hide-on-med-and-down">
+				<li><a href="{{ pathFor route='homeRoute' }}"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
 				{{#if currentUser}}
 					<li><a href="{{ pathFor route='profileRoute' }}"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{currentUser.profile.name}}</a></li>
 					<li><a href="#" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
 				{{else}}
-					<li><a href="{{ pathFor route='startRoute' }}"><i class="fa fa-play-circle" aria-hidden="true"></i> Get Started</a></li>
+					<li><a href="{{ pathFor route='loginRoute' }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a></li>
+					<li><a href="{{ pathFor route='registerRoute' }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
 				{{/if}}
 			</ul>
 			<ul class="side-nav" id="mobile-demo">
@@ -41,7 +43,8 @@
 					<li><a href="{{ pathFor route='profileRoute' }}"><i class="fa fa-user-circle-o" aria-hidden="true"></i> {{currentUser.profile.name}}</a></li>
 					<li><a href="#" class="logout"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
 				{{else}}
-					<li><a href="{{ pathFor route='startRoute' }}"><i class="fa fa-play-circle" aria-hidden="true"></i> Get Started</a></li>
+					<li><a href="{{ pathFor route='loginRoute' }}"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a></li>
+					<li><a href="{{ pathFor route='registerRoute' }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
 				{{/if}}
 			</ul>
 	    </div>

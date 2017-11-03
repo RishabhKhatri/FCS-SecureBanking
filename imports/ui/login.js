@@ -23,25 +23,27 @@ Template.Login.events({
 	'submit form'(event)
 	{
 		event.preventDefault();
-		var emailVar = event.target.loginEmail.value;
-		var passVar = event.target.loginPass.value;
-		Meteor.loginWithPassword(emailVar, passVar, function(error) {
-			if (error) {
-				FlashMessages.sendError(error.reason);
+		var emailVar = UniHTML.purify(event.target.loginEmail.value);
+		var passVar = UniHTML.purify(event.target.loginPass.value);
+		var captchaData = grecaptcha.getResponse();
+		Meteor.call('client.check_captcha', captchaData, function(err, result) {
+			grecaptcha.reset();
+			if (result) {
+				Meteor.loginWithPassword(emailVar, passVar, function(error) {
+					if (error) {
+						FlashMessages.sendError(error.reason);
+					}
+					else
+					{
+						Router.go("homeRoute");
+					}
+				});
 			}
 			else
 			{
+				FlashMessages.sendError("Captch Error");
 				Router.go("homeRoute");
 			}
 		});
-	},
-	// 'focus .pass'(event)
-	// {
-	// 	$('#keyboard').keyboard({
-	// 		layout: 'num',
-	// 		restrictInput: true,
-	// 		preventPaste: true,
-	// 		autoAccept: true,
-	// 	});
-	// }
+	}
 });

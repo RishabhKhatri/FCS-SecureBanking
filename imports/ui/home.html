@@ -13,10 +13,13 @@
 			</div>
 		</div>
 	{{else}}
-		<div class="home-panel card-panel hoverable">
-			<div class="panel-body">
-				<h1>Welcome to Secure Banking!</h1>
-				<span style="font-size: 24px;">Let's <a style="text-decoration: none;" href="/get_started">get started</a>.</span>
+		<div class="container">
+			<div class="home-panel card-panel hoverable">
+				<div class="panel-body">
+					<h1>Welcome to Secure Banking!</h1>
+					<span style="font-size: 24px;">Please <a style="text-decoration: none;" href="{{ pathFor route='loginRoute' }}">login</a> to continue.</span>
+					<span style="font-size: 24px;">Or <a style="text-decoration: none;" href="{{ pathFor route='registerRoute' }}">register</a> for a new account.</span>
+				</div>
 			</div>
 		</div>
 	{{/if}}

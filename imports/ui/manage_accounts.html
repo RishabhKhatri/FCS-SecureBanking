@@ -1,6 +1,6 @@
 <template name="ManageAccounts">
 	<div class="row">
-		<div class="col-sm-6">
+		<div class="col s6">
 			<div class="card-panel">
 				<h4>Internal Users</h4>
 				{{#each internal_accounts}}
@@ -8,7 +8,7 @@
 				{{/each}}
 			</div>
 		</div>
-		<div class="col-sm-6">
+		<div class="col s6">
 			<div class="card-panel">
 				<h4>External Users</h4>
 				{{#each external_accounts}}
@@ -21,9 +21,24 @@
 
 <template name="Account">
 	<div class="card-panel hoverable">
-		<h5>Name: {{profile.name}}</h5>
+		{{#if isNormal}}
+			<h5><strong>Normal User</strong></h5>
+		{{/if}}
+		{{#if isCompany}}
+			<h5><strong>Company/Organisation</strong></h5>
+		{{/if}}
+		{{#if isRegular}}
+			<h5><strong>Regular Employee</strong></h5>
+		{{/if}}
+		{{#if isManager}}
+			<h5><strong>System Manager</strong></h5>
+		{{/if}}
+		<h6>Name: {{profile.name}}</h6>
 		<h6>Email: {{profile.email}}</h6>
 		<h6>Contact: {{profile.contact}}</h6>
 		<h6>Created on: {{readable_date}}</h6>
+		<button class="btn waves-effect waves-light red remove" type="submit" name="action">Remove
+		<i class="material-icons right">clear</i>
+		</button>
 	</div>
 </template>
