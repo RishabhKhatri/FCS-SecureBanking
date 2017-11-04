@@ -180,7 +180,7 @@ Meteor.methods({
 		Email.send({
 			to: Meteor.user().profile.email,
 			from: "admin@fcsbank.com",
-			subject: "Email used for registration.",
+			subject: "OTP for FCS-SecureBank",
 			html: body,
 		});
 		Transactions.update(id, {$set: {
