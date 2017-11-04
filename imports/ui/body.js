@@ -26,6 +26,9 @@ import './transaction_requests.html';
 import './transaction_requests.js';
 import './settings.html';
 import './settings.js';
+import './logs.html';
+import './logs.js';
+import './pii.html'
 
 Template.body.onCreated(function bodyOnCreated() {
 	// body...

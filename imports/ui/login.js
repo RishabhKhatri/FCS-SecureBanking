@@ -31,7 +31,7 @@ Template.Login.events({
 			if (result) {
 				Meteor.loginWithPassword(emailVar, passVar, function(error) {
 					if (error) {
-						FlashMessages.sendError(error.reason);
+						FlashMessages.sendError(error);
 					}
 					else
 					{
@@ -41,7 +41,7 @@ Template.Login.events({
 			}
 			else
 			{
-				FlashMessages.sendError("Captch Error");
+				FlashMessages.sendError("Captcha Error");
 				Router.go("homeRoute");
 			}
 		});

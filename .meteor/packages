@@ -30,5 +30,6 @@ altapp:recaptcha
 nourharidy:ssl
 ejson
 vazco:universe-html-purifier
-ostrio:logger
 ostrio:loggermongo
+clinical:winston-browser-logging
+materialize:materialize

@@ -1,12 +1,11 @@
 import '../imports/ui/body.js';
+import { Meteor } from 'meteor/meteor';
 
 FlashMessages.configure({
 	autoHide: true,
 	hideDelay: 1000,
 	autoScroll: true
 });
-
-// BrowserPolicy.content.disallowInlineScripts();
 
 Meteor.startup(function() {
     reCAPTCHA.config({

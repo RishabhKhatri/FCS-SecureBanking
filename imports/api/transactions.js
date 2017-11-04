@@ -8,7 +8,7 @@ export const Transactions = new Mongo.Collection('transactions');
 
 if (Meteor.isServer) {
 	Meteor.publish('transactions', function transactionsPublication() {
-		if (Roles.userIsInRole(Meteor.userId(), ["admin", "manager"])) {
+		if (Roles.userIsInRole(Meteor.userId(), ["manager"])) {
 			return Transactions.find();
 		}
 		if (Roles.userIsInRole(Meteor.userId(), "regular")) {
